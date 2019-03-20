@@ -2,22 +2,58 @@ import Network
 import Topology
 import GameBoard
 import random
+from copy import deepcopy
+import C4NN
 
-# Training part 1 - assign targets via some sort of equation.
-# Possible equation: max # of my chips in a row / max # of opponent's chips in a row
+new_net = input("New network?(y/n)")
+ai = None
+if new_net == "y":
+    ai = C4NN.C4NN()
+else:
+    # Do the pickle loading here
+    pass
 
-# generate arbitrary number of game boards - let's say 100000. 0 is empty, 1 is red, 2 is black
-game_boards = []
-# while len(game_boards) < 100000:
-#     board = GameBoard.GameBoard()
+ai.train_phase1(10000, 1000)
 
-board = GameBoard.GameBoard()
-win = False
-while not win:
-    i = int(input("Please make a move between 0 and 6\n"))
-    win = board.make_move(i)
-    for layer in board.board:
-        print(layer)
+#Play 1000 games
+for i in range(1000):
+    print("Net set " + str(i))
+    board = GameBoard.GameBoard()
+    opponent = deepcopy(ai)
+    #play the game once for net starting, once for opponent starting
+    for i in range(2):
+        redPlayer = None
+        blackPlayer = None
+        if i == 0:
+            redPlayer = ai
+            blackPlayer = opponent
+        if i == 1:
+            redPlayer = opponent
+            blackPlayer = ai
+        # play the game until won or tied
+        while not (board.won or board.tied):
+            if board.whoseTurn() == 1:
+                board.make_move(redPlayer.best_move(board))
+            else:
+                board.make_move(blackPlayer.best_move(board))
+            for layer in board.board:
+                print(layer)
+            print()
+            print()
+
+        #here. find out who won. record this.
+    #If the same player won both times, set that player as the new ai.
+    #Otherwise, find some way to reconcile it. Perhaps throw out both games, or assign a random one to be the winner.
+    #A tiebreaker likely wouldn't work, because the game would go exactly the way the first one did.
+
+
+# board = GameBoard.GameBoard()
+# win = False
+# while not win:
+#     i = int(input("Please make a move between 0 and 6\n"))
+#     win = board.make_move(i)
+#     for layer in board.board:
+#         print(layer)
 
 # board.make_move(0)
 # board.make_move(0)

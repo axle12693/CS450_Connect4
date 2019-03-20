@@ -7,15 +7,14 @@ class GameBoard:
                 if self.board[i][j] != 0:
                     self.count += 1
         self.won = False
+        self.tied = False
 
     def make_move(self, place=0):
         if self.board[0][place] != 0:
             raise Exception("This column has already been filled up!")
         if self.won:
             raise Exception("This game has been won (or lost) already!")
-        color = 1
-        if self.count % 2 == 1:
-            color = 2
+        color = self.whoseTurn()
         row = 0
         for i in range(5, -1, -1):
             if self.board[i][place] == 0:
@@ -25,6 +24,9 @@ class GameBoard:
         self.count += 1
 
         return self.check_won((row, place))
+
+    def whoseTurn(self):
+        return (self.count % 2) + 1
 
     def check_won(self, tup):
         color = self.board[tup[0]][tup[1]]
@@ -116,7 +118,8 @@ class GameBoard:
         if total_h >= 4 or total_v >= 4 or total_rd >= 4 or total_fd >= 4:
             self.won = True
             print("Winner!")
-            return self.won
-        else:
-            return self.won
+        elif 0 not in self.board[0]:
+            print("Tied!")
+            self.tied = True
+
 
