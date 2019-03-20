@@ -12,16 +12,27 @@ game_boards = []
 #     board = GameBoard.GameBoard()
 
 board = GameBoard.GameBoard()
-board.make_move(0)
-board.make_move(0)
-board.make_move(1)
-board.make_move(0)
-board.make_move(2)
-board.make_move(0)
-board.make_move(3)
-board.make_move(3)
+win = False
+while not win:
+    i = int(input("Please make a move between 0 and 6\n"))
+    win = board.make_move(i)
+    for layer in board.board:
+        print(layer)
+
+# board.make_move(0)
+# board.make_move(0)
+# board.make_move(1)
+# board.make_move(0)
+# board.make_move(2)
+# board.make_move(3)
+# board.make_move(3)
+# board.make_move(4)
+# board.make_move(5)
+# board.make_move(4)
+# board.make_move(4)
+# board.make_move(5)
+# board.make_move(5)
+# board.make_move(6)
+# board.make_move(5)
 
 
-
-for layer in board.board:
-    print(layer)
