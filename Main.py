@@ -13,7 +13,7 @@ else:
     # Do the pickle loading here
     pass
 
-ai.train_phase1(10000, 1000)
+ai.train_phase1(1000, 3)
 
 #Play 1000 games
 for i in range(1000):

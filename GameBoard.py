@@ -121,5 +121,6 @@ class GameBoard:
         elif 0 not in self.board[0]:
             print("Tied!")
             self.tied = True
+        return total_h, total_v, total_rd, total_fd
 
 
