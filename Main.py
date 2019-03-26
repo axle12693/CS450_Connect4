@@ -4,14 +4,15 @@ import GameBoard
 import random
 from copy import deepcopy
 import C4NN
+import pickle
 
 new_net = input("New network?(y/n)")
 ai = None
 if new_net == "y":
     ai = C4NN.C4NN()
 else:
-    # Do the pickle loading here
-    pass
+    ai_file = open("AIstoragefile", "rb")
+    ai = pickle.load(ai_file)
 
 ai.train_phase1(1000, 3)
 
