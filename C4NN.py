@@ -4,6 +4,8 @@ import random
 import GameBoard
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+import numpy as np
+from copy import deepcopy
 
 
 class C4NN:
@@ -19,8 +21,45 @@ class C4NN:
         top.add_layer(1)
         self.net = Network.Network(top)
 
+    def mutate(self, ls = None):
+        if ls is None:
+            ls = self.net.weights
+        for index, el in enumerate(ls):
+            if type(el) == type([]):
+                ls[index] = self.mutate(ls[index])
+            else:
+                ls[index] = el + random.uniform(-1, 1)
+        return ls
+
     def best_move(self, board):
-        return random.randint(0, 6)
+        next_boards = [0,0,0,0,0,0,0]
+
+        for i in range(7):
+            board_copy = deepcopy(board)
+            try:
+                board_copy.make_move(i, suppress_won_message=True)
+                next_boards[i] = board_copy
+            except:
+                next_boards[i] = None
+        scores = []
+        for index, next_board in enumerate(next_boards):
+            if next_board is None:
+                scores.append(-1)
+                continue
+            board_vector = []
+            for i in range(6):
+                board_vector += next_board.board[i]
+            one_hot_board_vector = []
+            for el in board_vector:
+                if el == 0:
+                    one_hot_board_vector += [1, 0, 0]
+                elif el == 1:
+                    one_hot_board_vector += [0, 1, 0]
+                else:
+                    one_hot_board_vector += [0, 0, 1]
+            one_hot_board_vector += [next_board.whoseTurn() - 1]
+            scores.append(self.net.predict(one_hot_board_vector)[0])
+        return np.argmax(scores)
 
     def train_phase1(self, num_boards, num_epochs):
         # The first phase of training - this will be done entirely inside the class.
@@ -34,7 +73,7 @@ class C4NN:
         while len(boards_list) < num_boards:
             print("Boards_list is length " + str(len(boards_list)))
             board = GameBoard.GameBoard()
-            for i in range(random.randint(0, 42)):
+            for i in range(random.randint(1, 42)):
                 try:
                     board.make_move(random.randint(0, 6))
                 except:

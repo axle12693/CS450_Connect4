@@ -1,6 +1,11 @@
+from termcolor import colored
+
 class GameBoard:
-    def __init__(self, state=[[0 for _ in range(7)] for _ in range(6)]):
-        self.board = state  # just a 7x6 list
+    def __init__(self, state=None):
+        if state:
+            self.board = state  # just a 7x6 list
+        else:
+            self.board = [[0 for _ in range(7)] for _ in range(6)]
         self.count = 0
         for i in range(6):
             for j in range(7):
@@ -8,12 +13,13 @@ class GameBoard:
                     self.count += 1
         self.won = False
         self.tied = False
+        self.won_by = 0
 
-    def make_move(self, place=0):
+    def make_move(self, place=0, suppress_won_message=False):
         if self.board[0][place] != 0:
             raise Exception("This column has already been filled up!")
-        if self.won:
-            raise Exception("This game has been won (or lost) already!")
+        if self.won or self.tied:
+            raise Exception("This game has been finished already!")
         color = self.whoseTurn()
         row = 0
         for i in range(5, -1, -1):
@@ -23,12 +29,27 @@ class GameBoard:
                 break
         self.count += 1
 
-        return self.check_won((row, place))
+        return self.check_won((row, place), suppress_message=suppress_won_message)
 
     def whoseTurn(self):
-        return (self.count % 2) + 1
+        turn = (self.count % 2) + 1
+        if turn not in (1, 2):
+            raise Exception("Somehow, it is an invalid player's turn!")
+        return turn
 
-    def check_won(self, tup):
+    def print(self):
+        for row in self.board:
+            piece_list = []
+            for el in row:
+                color = "white"
+                if el == 1:
+                    color = "red"
+                elif el == 2:
+                    color = "blue"
+                piece_list.append(colored(el, color))
+            print("|" + piece_list[0] + "|" + piece_list[1] + "|" + piece_list[2] + "|" + piece_list[3] + "|" + piece_list[4] + "|" + piece_list[5] + "|" + piece_list[6] + "|")
+
+    def check_won(self, tup, suppress_message=False):
         color = self.board[tup[0]][tup[1]]
 
         # check horizontal
@@ -117,9 +138,13 @@ class GameBoard:
 
         if total_h >= 4 or total_v >= 4 or total_rd >= 4 or total_fd >= 4:
             self.won = True
-            print("Winner!")
+            self.won_by = color
+            if not suppress_message:
+                print("Winner!")
+                print(self.won_by)
         elif 0 not in self.board[0]:
-            print("Tied!")
+            if not suppress_message:
+                print("Tied!")
             self.tied = True
         return total_h, total_v, total_rd, total_fd
 
