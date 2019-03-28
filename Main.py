@@ -19,7 +19,7 @@ else:
 #ai.train_phase1(1000, 500)
 
 #Play 1000 games
-for i in range(1):
+for i in range(100):
     print("Net set " + str(i))
     opponent = deepcopy(ai)
     opponent.mutate()
@@ -46,12 +46,12 @@ for i in range(1):
                 board.print()
                 raise Exception("You should never get this message!")
             if board.whoseTurn() == 1:
-                print("Making red's move...")
+                # print("Making red's move...")
                 board.make_move(redPlayer.best_move(board))
             else:
-                print("Making black's move...")
+                # print("Making black's move...")
                 board.make_move(blackPlayer.best_move(board))
-            board.print()
+            # board.print()
             # for layer in board.board:
             #     print(layer)
             # print()

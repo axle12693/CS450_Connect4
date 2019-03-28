@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import numpy as np
 from copy import deepcopy
+import time
+import math
 
 
 class C4NN:
@@ -21,7 +23,7 @@ class C4NN:
         top.add_layer(1)
         self.net = Network.Network(top)
 
-    def mutate(self, ls = None):
+    def mutate(self, ls=None):
         if ls is None:
             ls = self.net.weights
         for index, el in enumerate(ls):
@@ -31,7 +33,7 @@ class C4NN:
                 ls[index] = el + random.uniform(-1, 1)
         return ls
 
-    def best_move(self, board):
+    def get_next_boards(self, board):
         next_boards = [0,0,0,0,0,0,0]
 
         for i in range(7):
@@ -41,25 +43,110 @@ class C4NN:
                 next_boards[i] = board_copy
             except:
                 next_boards[i] = None
-        scores = []
-        for index, next_board in enumerate(next_boards):
-            if next_board is None:
-                scores.append(-1)
+        return next_boards
+
+    def board_to_vector(self, board):
+        board_vector = []
+        for i in range(6):
+            board_vector += board.board[i]
+        one_hot_board_vector = []
+        for el in board_vector:
+            if el == 0:
+                one_hot_board_vector += [1, 0, 0]
+            elif el == 1:
+                one_hot_board_vector += [0, 1, 0]
+            else:
+                one_hot_board_vector += [0, 0, 1]
+        one_hot_board_vector += [board.whoseTurn() - 1]
+        return one_hot_board_vector
+
+    def expand_once(self, board):
+        if board is None:
+            return 0
+        if board.expanded:
+            # Choose a random next_board to expand once (at this level, or if that is already done, at a future one)
+            # This board will be picked probabilistically based on its "score".
+            sum = np.sum(board.next_boards_scores)
+            choice = random.uniform(0, sum)
+            for i in range(1, 7):
+                if choice <= np.sum(board.next_boards_scores[:i]):
+                    board.next_boards_scores[i - 1] = self.expand_once(board.next_boards[i - 1])
+                    break
+        else:
+            board.next_boards = self.get_next_boards(board)
+            board.next_boards_scores = []
+            board.expanded = True
+            for index, b in enumerate(board.next_boards):
+                if b is None:
+                    board.next_boards_scores.append(0)
+                    continue
+                board_vector = self.board_to_vector(b)
+                board.next_boards[index].score = self.net.predict(board_vector)
+                board.next_boards[index].expanded = False
+                board.next_boards_scores.append(board.next_boards[index].score)
+        return 1 - np.mean(board.next_boards_scores)
+
+    def expand(self, board, run_until):
+        board.next_boards = self.get_next_boards(board)
+        # put the scores for next_boards into a single list, with assorted indices - corresponding to move numbers
+        board.next_boards_scores = []
+        board.expanded = True
+        for index, b in enumerate(board.next_boards):
+            if b is None:
+                board.next_boards_scores.append(0)
                 continue
-            board_vector = []
-            for i in range(6):
-                board_vector += next_board.board[i]
-            one_hot_board_vector = []
-            for el in board_vector:
-                if el == 0:
-                    one_hot_board_vector += [1, 0, 0]
-                elif el == 1:
-                    one_hot_board_vector += [0, 1, 0]
-                else:
-                    one_hot_board_vector += [0, 0, 1]
-            one_hot_board_vector += [next_board.whoseTurn() - 1]
-            scores.append(self.net.predict(one_hot_board_vector)[0])
-        return np.argmax(scores)
+            board_vector = self.board_to_vector(b)
+            board.next_boards[index].score = self.net.predict(board_vector)
+            board.next_boards[index].expanded = False
+            board.next_boards_scores.append(board.next_boards[index].score)
+        while True:
+            # print("choosing next_board to expand")
+            if time.time() * 1000 >= run_until:
+                return
+            # Choose a random next_board to expand once (at this level, or if that is already done, at a future one)
+            # This board will be picked probabilistically based on its "score".
+            sum = np.sum(board.next_boards_scores)
+            choice = random.uniform(0, sum)
+            for i in range(1, 7):
+                if choice <= np.sum(board.next_boards_scores[:i]):
+                    board.next_boards_scores[i-1] = self.expand_once(board.next_boards[i-1])
+                    break
+
+    def best_move(self, board, time_limit=100):
+        board_copy = deepcopy(board)
+        run_until = math.floor(time.time() * 1000) + time_limit
+        self.expand(board_copy, run_until)
+        return np.argmax(board_copy.next_boards_scores)
+
+
+        # next_boards = [0,0,0,0,0,0,0]
+        #
+        # for i in range(7):
+        #     board_copy = deepcopy(board)
+        #     try:
+        #         board_copy.make_move(i, suppress_won_message=True)
+        #         next_boards[i] = board_copy
+        #     except:
+        #         next_boards[i] = None
+        # scores = []
+        # for index, next_board in enumerate(next_boards):
+        #     if next_board is None:
+        #         scores.append(-1)
+        #         continue
+        #     board_vector = []
+        #     for i in range(6):
+        #         board_vector += next_board.board[i]
+        #     one_hot_board_vector = []
+        #     for el in board_vector:
+        #         if el == 0:
+        #             one_hot_board_vector += [1, 0, 0]
+        #         elif el == 1:
+        #             one_hot_board_vector += [0, 1, 0]
+        #         else:
+        #             one_hot_board_vector += [0, 0, 1]
+        #     one_hot_board_vector += [next_board.whoseTurn() - 1]
+        #     scores.append(self.net.predict(one_hot_board_vector)[0])
+        # return np.argmax(scores)
 
     def train_phase1(self, num_boards, num_epochs):
         # The first phase of training - this will be done entirely inside the class.
