@@ -41,8 +41,13 @@ class C4NN:
             try:
                 board_copy.make_move(i, suppress_won_message=True)
                 next_boards[i] = board_copy
-            except:
-                next_boards[i] = None
+            except GameBoard.GameFinishedException:
+                if board_copy.tied:
+                    pass # leave it as a 0
+                elif board_copy.won:
+                    next_boards[i] = board_copy.won_by
+            except GameBoard.FullColumnException:
+                pass #leave it as a 0
         return next_boards
 
     def board_to_vector(self, board):
@@ -61,8 +66,8 @@ class C4NN:
         return one_hot_board_vector
 
     def expand_once(self, board):
-        if board is None:
-            return 0
+        if board == 0 or board == 1 or board == 2:
+            raise Exception("You really shouldn't get this. An int board was passed to expand_once.")
         if board.expanded:
             # Choose a random next_board to expand once (at this level, or if that is already done, at a future one)
             # This board will be picked probabilistically based on its "score".
@@ -70,15 +75,31 @@ class C4NN:
             choice = random.uniform(0, sum)
             for i in range(1, 7):
                 if choice <= np.sum(board.next_boards_scores[:i]):
-                    board.next_boards_scores[i - 1] = self.expand_once(board.next_boards[i - 1])
+                    b = board.next_boards[i - 1]
+                    if b == 0 or b == 1 or b == 2:
+                        pass
+                    else:
+                        board.next_boards_scores[i - 1] = self.expand_once(b)
                     break
         else:
             board.next_boards = self.get_next_boards(board)
             board.next_boards_scores = []
             board.expanded = True
             for index, b in enumerate(board.next_boards):
-                if b is None:
+                if b == 0:
                     board.next_boards_scores.append(0)
+                    continue
+                elif b == 1:
+                    if board.whoseTurn() == 1:
+                        board.next_boards_scores.append(0)
+                    else:
+                        board.next_boards_scores.append(1)
+                    continue
+                elif b == 2:
+                    if board.whoseTurn() == 2:
+                        board.next_boards_scores.append(0)
+                    else:
+                        board.next_boards_scores.append(1)
                     continue
                 board_vector = self.board_to_vector(b)
                 board.next_boards[index].score = self.net.predict(board_vector)
@@ -92,8 +113,20 @@ class C4NN:
         board.next_boards_scores = []
         board.expanded = True
         for index, b in enumerate(board.next_boards):
-            if b is None:
+            if b == 0:
                 board.next_boards_scores.append(0)
+                continue
+            elif b == 1:
+                if board.whoseTurn() == 1:
+                    board.next_boards_scores.append(0)
+                else:
+                    board.next_boards_scores.append(1)
+                continue
+            elif b == 2:
+                if board.whoseTurn() == 2:
+                    board.next_boards_scores.append(0)
+                else:
+                    board.next_boards_scores.append(1)
                 continue
             board_vector = self.board_to_vector(b)
             board.next_boards[index].score = self.net.predict(board_vector)
@@ -109,7 +142,11 @@ class C4NN:
             choice = random.uniform(0, sum)
             for i in range(1, 7):
                 if choice <= np.sum(board.next_boards_scores[:i]):
-                    board.next_boards_scores[i-1] = self.expand_once(board.next_boards[i-1])
+                    b = board.next_boards[i-1]
+                    if b == 0 or b == 1 or b == 2:
+                        board.next_boards_scores[i-1] = 0
+                    else:
+                        board.next_boards_scores[i-1] = self.expand_once(b)
                     break
 
     def best_move(self, board, time_limit=100):
