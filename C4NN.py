@@ -15,12 +15,10 @@ class C4NN:
         # eventually, we will create the network here.
         top = Topology.Topology()
         top.add_layer(127, "Input")
-        top.add_layer(64)
+        top.add_layer(127)
+        top.add_layer(127)
         top.add_layer(32)
-        top.add_layer(16)
-        top.add_layer(8)
-        top.add_layer(4)
-        top.add_layer(1)
+        top.add_layer(7)
         self.net = Network.Network(top)
 
     def mutate(self, ls=None):
@@ -80,6 +78,7 @@ class C4NN:
                         pass
                     else:
                         board.next_boards_scores[i - 1] = self.expand_once(b)
+                        board.next_boards[i-1].score = board.next_boards_scores[i-1]
                     break
         else:
             board.next_boards = self.get_next_boards(board)
@@ -88,21 +87,31 @@ class C4NN:
             for index, b in enumerate(board.next_boards):
                 if b == 0:
                     board.next_boards_scores.append(0)
+                    if board.next_boards[index] not in (0, 1, 2):
+                        board.next_boards[index].score = board.next_boards_scores[index]
                     continue
                 elif b == 1:
                     if board.whoseTurn() == 1:
                         board.next_boards_scores.append(0)
+                        if board.next_boards[index] not in (0, 1, 2):
+                            board.next_boards[index].score = board.next_boards_scores[index]
                     else:
                         board.next_boards_scores.append(1)
+                        if board.next_boards[index] not in (0, 1, 2):
+                            board.next_boards[index].score = board.next_boards_scores[index]
                     continue
                 elif b == 2:
                     if board.whoseTurn() == 2:
                         board.next_boards_scores.append(0)
+                        if board.next_boards[index] not in (0, 1, 2):
+                            board.next_boards[index].score = board.next_boards_scores[index]
                     else:
                         board.next_boards_scores.append(1)
+                        if board.next_boards[index] not in (0, 1, 2):
+                            board.next_boards[index].score = board.next_boards_scores[index]
                     continue
                 board_vector = self.board_to_vector(b)
-                board.next_boards[index].score = self.net.predict(board_vector)
+                board.next_boards[index].score = self.net.predict(board_vector)[0]
                 board.next_boards[index].expanded = False
                 board.next_boards_scores.append(board.next_boards[index].score)
         return 1 - np.mean(board.next_boards_scores)
@@ -115,21 +124,31 @@ class C4NN:
         for index, b in enumerate(board.next_boards):
             if b == 0:
                 board.next_boards_scores.append(0)
+                if board.next_boards[index] not in (0, 1, 2):
+                    board.next_boards[index].score = board.next_boards_scores[index]
                 continue
             elif b == 1:
                 if board.whoseTurn() == 1:
                     board.next_boards_scores.append(0)
+                    if board.next_boards[index] not in (0, 1, 2):
+                        board.next_boards[index].score = board.next_boards_scores[index]
                 else:
                     board.next_boards_scores.append(1)
+                    if board.next_boards[index] not in (0, 1, 2):
+                        board.next_boards[index].score = board.next_boards_scores[index]
                 continue
             elif b == 2:
                 if board.whoseTurn() == 2:
                     board.next_boards_scores.append(0)
+                    if board.next_boards[index] not in (0, 1, 2):
+                        board.next_boards[index].score = board.next_boards_scores[index]
                 else:
                     board.next_boards_scores.append(1)
+                    if board.next_boards[index] not in (0, 1, 2):
+                        board.next_boards[index].score = board.next_boards_scores[index]
                 continue
             board_vector = self.board_to_vector(b)
-            board.next_boards[index].score = self.net.predict(board_vector)
+            board.next_boards[index].score = self.net.predict(board_vector)[0]
             board.next_boards[index].expanded = False
             board.next_boards_scores.append(board.next_boards[index].score)
         while True:
@@ -145,15 +164,19 @@ class C4NN:
                     b = board.next_boards[i-1]
                     if b == 0 or b == 1 or b == 2:
                         board.next_boards_scores[i-1] = 0
+                        board.next_boards[i-1].score = 0
                     else:
                         board.next_boards_scores[i-1] = self.expand_once(b)
+                        board.next_boards[i-1].score = board.next_boards_scores[i-1]
                     break
 
-    def best_move(self, board, time_limit=100):
+    def best_move(self, board, time_limit=1000):
         board_copy = deepcopy(board)
-        run_until = math.floor(time.time() * 1000) + time_limit
-        self.expand(board_copy, run_until)
-        return np.argmax(board_copy.next_boards_scores)
+        board_vec = self.board_to_vector(board_copy)
+        return self.net.predict(board_vec)
+        # run_until = math.floor(time.time() * 1000) + time_limit
+        # self.expand(board_copy, run_until)
+        # return np.argmax(board_copy.next_boards_scores)
 
 
         # next_boards = [0,0,0,0,0,0,0]
