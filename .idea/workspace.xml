@@ -4,9 +4,11 @@
     <list default="true" id="733ca178-8b08-48a4-95a2-2438142856ca" name="Default" comment="Added loading a pickled file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AIstoragefile" beforeDir="false" afterPath="$PROJECT_DIR$/AIstoragefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AIstoragefile_alex_test" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/C4NN.py" beforeDir="false" afterPath="$PROJECT_DIR$/C4NN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GameBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameBoard.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Network.py" beforeDir="false" afterPath="$PROJECT_DIR$/Network.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Topology.py" beforeDir="false" afterPath="$PROJECT_DIR$/Topology.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,8 +22,8 @@
       <file leaf-file-name="Main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="72" column="25" selection-start-line="72" selection-start-column="25" selection-end-line="72" selection-end-column="25" />
+            <state relative-caret-position="-3822">
+              <caret line="22" column="46" selection-start-line="22" selection-start-column="46" selection-end-line="22" selection-end-column="46" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -29,16 +31,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Topology.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Topology.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="231">
+              <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="GameBoard.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GameBoard.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
-              <folding>
-                <element signature="e#1122#1272#0" />
-                <element signature="e#1303#1770#0" />
-                <element signature="e#1834#4760#0" />
-              </folding>
+            <state relative-caret-position="-1586">
+              <caret line="53" column="8" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -46,10 +52,12 @@
       <file leaf-file-name="Network.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="546">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="136">
+              <caret line="38" column="8" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
+                <element signature="e#172#984#0" />
+                <element signature="e#1022#1632#0" />
               </folding>
             </state>
           </provider>
@@ -58,10 +66,17 @@
       <file leaf-file-name="C4NN.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/C4NN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3486">
-              <caret line="175" selection-start-line="175" selection-end-line="175" />
+            <state relative-caret-position="166">
+              <caret line="316" column="41" selection-start-line="316" selection-start-column="41" selection-end-line="316" selection-end-column="41" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
+                <element signature="e#297#554#0" />
+                <element signature="e#595#1004#0" />
+                <element signature="e#1079#1698#0" />
+                <element signature="e#1752#2189#0" />
+                <element signature="e#2233#5113#0" />
+                <element signature="e#5163#8005#0" />
+                <element signature="e#8064#9695#0" />
               </folding>
             </state>
           </provider>
@@ -89,14 +104,16 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/GameBoard.py" />
+        <option value="$PROJECT_DIR$/Topology.py" />
+        <option value="$PROJECT_DIR$/Network.py" />
         <option value="$PROJECT_DIR$/C4NN.py" />
         <option value="$PROJECT_DIR$/Main.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-15" />
-    <option name="y" value="-15" />
+    <option name="x" value="-10" />
+    <option name="y" value="70" />
     <option name="width" value="1935" />
     <option name="height" value="1020" />
   </component>
@@ -105,6 +122,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -116,7 +134,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -197,17 +214,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12109375" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.5150327" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.28496733" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4993395" weight="0.32941177" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32941177" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.33202615" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.28366014" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -215,7 +231,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32941177" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -230,10 +246,109 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="27" />
+      <option name="time" value="40" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3024">
+          <caret line="155" column="28" selection-start-line="155" selection-start-column="28" selection-end-line="155" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Topology.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GameBoard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2898">
+          <caret line="138" column="21" selection-start-line="138" selection-start-column="21" selection-end-line="138" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1155">
+          <caret line="194" column="107" selection-start-line="194" selection-start-column="107" selection-end-line="194" selection-end-column="107" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#172#984#0" />
+            <element signature="e#1022#1632#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/C4NN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#297#554#0" />
+            <element signature="e#595#1004#0" />
+            <element signature="e#1079#1698#0" />
+            <element signature="e#1752#2189#0" />
+            <element signature="e#2233#5113#0" />
+            <element signature="e#5163#8005#0" />
+            <element signature="e#8064#9695#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="22" column="45" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GameBoard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2898">
+          <caret line="138" column="21" selection-start-line="138" selection-start-column="21" selection-end-line="138" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1764">
+          <caret line="87" selection-start-line="87" selection-end-line="87" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#172#984#0" />
+            <element signature="e#1022#1632#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/C4NN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="798">
+          <caret line="48" selection-start-line="48" selection-end-line="48" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#297#554#0" />
+            <element signature="e#595#1004#0" />
+            <element signature="e#1079#1698#0" />
+            <element signature="e#1752#2189#0" />
+            <element signature="e#2233#5113#0" />
+            <element signature="e#5163#8005#0" />
+            <element signature="e#8064#9695#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
@@ -248,11 +363,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#1122#1272#0" />
-            <element signature="e#1303#1770#0" />
-            <element signature="e#1834#4760#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -262,6 +372,8 @@
           <caret line="28" selection-start-line="28" selection-end-line="28" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#172#984#0" />
+            <element signature="e#1022#1632#0" />
           </folding>
         </state>
       </provider>
@@ -272,6 +384,13 @@
           <caret line="175" selection-start-line="175" selection-end-line="175" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#297#554#0" />
+            <element signature="e#595#1004#0" />
+            <element signature="e#1079#1698#0" />
+            <element signature="e#1752#2189#0" />
+            <element signature="e#2233#5113#0" />
+            <element signature="e#5163#8005#0" />
+            <element signature="e#8064#9695#0" />
           </folding>
         </state>
       </provider>
@@ -290,11 +409,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#1122#1272#0" />
-            <element signature="e#1303#1770#0" />
-            <element signature="e#1834#4760#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -304,6 +418,8 @@
           <caret line="28" selection-start-line="28" selection-end-line="28" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#172#984#0" />
+            <element signature="e#1022#1632#0" />
           </folding>
         </state>
       </provider>
@@ -314,6 +430,13 @@
           <caret line="156" selection-start-line="156" selection-end-line="156" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#297#554#0" />
+            <element signature="e#595#1004#0" />
+            <element signature="e#1079#1698#0" />
+            <element signature="e#1752#2189#0" />
+            <element signature="e#2233#5113#0" />
+            <element signature="e#5163#8005#0" />
+            <element signature="e#8064#9695#0" />
           </folding>
         </state>
       </provider>
@@ -332,11 +455,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2478">
           <caret line="118" column="27" selection-start-line="118" selection-start-column="27" selection-end-line="118" selection-end-column="27" />
-          <folding>
-            <element signature="e#1122#1272#0" />
-            <element signature="e#1303#1770#0" />
-            <element signature="e#1834#4760#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -346,12 +464,16 @@
           <caret line="24" column="49" selection-start-line="24" selection-start-column="49" selection-end-line="24" selection-end-column="49" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#297#554#0" />
+            <element signature="e#595#1004#0" />
+            <element signature="e#1079#1698#0" />
+            <element signature="e#1752#2189#0" />
+            <element signature="e#2233#5113#0" />
+            <element signature="e#5163#8005#0" />
+            <element signature="e#8064#9695#0" />
           </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Topology.py">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -360,42 +482,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Network.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/site-packages/sklearn/utils/validation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="133">
+          <caret line="234" selection-start-line="234" selection-end-line="234" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/C4NN.py">
+    <entry file="file://$PROJECT_DIR$/Topology.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3486">
-          <caret line="175" selection-start-line="175" selection-end-line="175" />
+        <state relative-caret-position="231">
+          <caret line="12" column="29" selection-start-line="12" selection-start-column="29" selection-end-line="12" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="38" column="8" selection-start-line="38" selection-start-column="8" selection-end-line="38" selection-end-column="8" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#172#984#0" />
+            <element signature="e#1022#1632#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GameBoard.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="-1586">
+          <caret line="53" column="8" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/C4NN.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="316" column="41" selection-start-line="316" selection-start-column="41" selection-end-line="316" selection-end-column="41" />
           <folding>
-            <element signature="e#1122#1272#0" />
-            <element signature="e#1303#1770#0" />
-            <element signature="e#1834#4760#0" />
+            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#297#554#0" />
+            <element signature="e#595#1004#0" />
+            <element signature="e#1079#1698#0" />
+            <element signature="e#1752#2189#0" />
+            <element signature="e#2233#5113#0" />
+            <element signature="e#5163#8005#0" />
+            <element signature="e#8064#9695#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="72" column="25" selection-start-line="72" selection-start-column="25" selection-end-line="72" selection-end-column="25" />
+        <state relative-caret-position="-3822">
+          <caret line="22" column="46" selection-start-line="22" selection-start-column="46" selection-end-line="22" selection-end-column="46" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>

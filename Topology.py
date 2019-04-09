@@ -16,7 +16,7 @@ class Topology:
 
     @staticmethod
     def Sigmoid(inputs):
-        return 1 / (1 + np.exp(-1*inputs))
+        return 1 - (1 / (1 + np.exp(inputs))) # exquivalent to the normal sigmoid - I hope it fixes the overflow error
 
     @staticmethod
     def Input(data_in):

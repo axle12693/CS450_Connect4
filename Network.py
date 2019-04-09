@@ -1,6 +1,7 @@
 import random
 import numpy as np
 from copy import deepcopy
+from scipy.spatial import distance
 
 
 class Network:
@@ -58,11 +59,11 @@ class Network:
                 train_error = 0
                 test_error = 0
                 for j in range(len(data)):
-                    train_error += (self.predict(data[j]) - targets[j]) ** 2
-                train_error = np.sum(train_error) / len(data)
+                    train_error += distance.euclidean(self.predict(data[j]), targets[j])# (self.predict(data[j]) - targets[j]) ** 2
+                train_error = train_error / len(data)
                 for j in range(len(test_data)):
-                    test_error += (self.predict(test_data[j]) - test_targets[j]) ** 2
-                test_error = np.sum(test_error) / len(test_data)
+                    test_error += distance.euclidean(self.predict(test_data[j]), test_targets[j])  # (self.predict(test_data[j]) - test_targets[j]) ** 2
+                test_error = test_error / len(test_data)
 
                 plot_details[0].append(i)
                 plot_details[1].append(train_error)
@@ -167,6 +168,10 @@ class Network:
                     i_neuron_activation = self.activations[neuron_layer_index - 1][i_neuron_index]
                     amount_to_change_weight = self.learning_rate * error * i_neuron_activation
                     self.weights_copy[neuron_layer_index - 1][j_neuron_index][i_neuron_index] -= amount_to_change_weight
+                    if self.weights_copy[neuron_layer_index - 1][j_neuron_index][i_neuron_index] > 10:
+                        self.weights_copy[neuron_layer_index - 1][j_neuron_index][i_neuron_index] = 10
+                    if self.weights_copy[neuron_layer_index - 1][j_neuron_index][i_neuron_index] < -10:
+                        self.weights_copy[neuron_layer_index - 1][j_neuron_index][i_neuron_index] = -10
             self.errors = [neuron_layer_errors] + self.errors
         else:
             neuron_layer_errors = []
@@ -184,5 +189,9 @@ class Network:
                     i_neuron_activation = self.activations[neuron_layer_index - 1][i_neuron_index]
                     amount_to_change_weight = self.learning_rate * error * i_neuron_activation
                     self.weights_copy[neuron_layer_index - 1][j_neuron_index-1][i_neuron_index] -= amount_to_change_weight
+                    if self.weights_copy[neuron_layer_index - 1][j_neuron_index-1][i_neuron_index] > 10:
+                        self.weights_copy[neuron_layer_index - 1][j_neuron_index - 1][i_neuron_index] = 10
+                    if self.weights_copy[neuron_layer_index - 1][j_neuron_index-1][i_neuron_index] < -10:
+                        self.weights_copy[neuron_layer_index - 1][j_neuron_index - 1][i_neuron_index] = -10
             self.errors = [neuron_layer_errors] + self.errors
 

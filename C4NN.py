@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from copy import deepcopy
 import time
+from scipy.spatial import distance
 import math
 
 
@@ -14,12 +15,11 @@ class C4NN:
     def __init__(self):
         # eventually, we will create the network here.
         top = Topology.Topology()
-        top.add_layer(127, "Input")
-        top.add_layer(127)
-        top.add_layer(127)
-        top.add_layer(32)
-        top.add_layer(7)
-        self.net = Network.Network(top)
+        top.add_layer(85, "Input")
+        top.add_layer(672)
+        top.add_layer(336)
+        top.add_layer(14)
+        self.net = Network.Network(top, learning_rate=0.0001)
 
     def mutate(self, ls=None):
         if ls is None:
@@ -29,38 +29,42 @@ class C4NN:
                 ls[index] = self.mutate(ls[index])
             else:
                 ls[index] = el + random.uniform(-1, 1)
+                if ls[index] > 10:
+                    ls[index] = 10
+                if ls[index] < -10:
+                    ls[index] = -10
         return ls
 
-    def get_next_boards(self, board):
-        next_boards = [0,0,0,0,0,0,0]
+    def get_next_boards(self, board, force_opponent_move=False):
+        next_boards = [None, None, None, None, None, None, None]
 
         for i in range(7):
             board_copy = deepcopy(board)
             try:
-                board_copy.make_move(i, suppress_won_message=True)
+                board_copy.make_move(i, suppress_won_message=True, force_opponent_move=force_opponent_move)
                 next_boards[i] = board_copy
             except GameBoard.GameFinishedException:
                 if board_copy.tied:
                     pass # leave it as a 0
                 elif board_copy.won:
-                    next_boards[i] = board_copy.won_by
+                    next_boards[i] = None
             except GameBoard.FullColumnException:
                 pass #leave it as a 0
         return next_boards
 
-    def board_to_vector(self, board):
+    def board_to_vector(self, board, turn):
         board_vector = []
         for i in range(6):
             board_vector += board.board[i]
         one_hot_board_vector = []
         for el in board_vector:
             if el == 0:
-                one_hot_board_vector += [1, 0, 0]
+                one_hot_board_vector += [0, 0]
             elif el == 1:
-                one_hot_board_vector += [0, 1, 0]
+                one_hot_board_vector += [1, 0]
             else:
-                one_hot_board_vector += [0, 0, 1]
-        one_hot_board_vector += [board.whoseTurn() - 1]
+                one_hot_board_vector += [0, 1]
+        one_hot_board_vector += [turn]
         return one_hot_board_vector
 
     def expand_once(self, board):
@@ -110,7 +114,7 @@ class C4NN:
                         if board.next_boards[index] not in (0, 1, 2):
                             board.next_boards[index].score = board.next_boards_scores[index]
                     continue
-                board_vector = self.board_to_vector(b)
+                board_vector = self.board_to_vector(b, b.whoseTurn() - 1)
                 board.next_boards[index].score = self.net.predict(board_vector)[0]
                 board.next_boards[index].expanded = False
                 board.next_boards_scores.append(board.next_boards[index].score)
@@ -147,7 +151,7 @@ class C4NN:
                     if board.next_boards[index] not in (0, 1, 2):
                         board.next_boards[index].score = board.next_boards_scores[index]
                 continue
-            board_vector = self.board_to_vector(b)
+            board_vector = self.board_to_vector(b, b.whoseTurn() - 1)
             board.next_boards[index].score = self.net.predict(board_vector)[0]
             board.next_boards[index].expanded = False
             board.next_boards_scores.append(board.next_boards[index].score)
@@ -172,8 +176,15 @@ class C4NN:
 
     def best_move(self, board, time_limit=1000):
         board_copy = deepcopy(board)
-        board_vec = self.board_to_vector(board_copy)
-        return self.net.predict(board_vec)
+        board_vec = self.board_to_vector(board_copy, board_copy.whoseTurn() - 1)
+        prediction = self.net.predict(board_vec)
+        formatted_prediction = []
+        for i in range(7):
+            formatted_prediction.append((prediction[i] + prediction[i+7]) / 2)
+        return formatted_prediction
+
+
+
         # run_until = math.floor(time.time() * 1000) + time_limit
         # self.expand(board_copy, run_until)
         # return np.argmax(board_copy.next_boards_scores)
@@ -213,64 +224,166 @@ class C4NN:
         # Requires that we first create the network.
 
         # Generate num_boards random, but valid, boards, along with targets
-        print("Beginning train phase 1")
-        boards_list = []
-        board_vectors_list = []
-        targets_list = []
-        while len(boards_list) < num_boards:
-            print("Boards_list is length " + str(len(boards_list)))
+        print("Generating boards...")
+        training_boards_list = []
+        boards0 = []
+        boards1 = []
+        boards2 = []
+        boards3 = []
+        boards4 = []
+        boards5 = []
+        while len(boards0) < num_boards / 6:
+            num_moves = random.randint(2,7)
             board = GameBoard.GameBoard()
-            for i in range(random.randint(1, 42)):
+            for _ in range(num_moves):
                 try:
-                    board.make_move(random.randint(0, 6))
+                    board.make_move(random.randint(0,6), suppress_won_message=True)
                 except:
-                    break
-            boards_list.append(board)
-            board_vector = []
-            for i in range(6):
-                board_vector += board.board[i]
-            one_hot_board_vector = []
-            for el in board_vector:
-                if el == 0:
-                    one_hot_board_vector += [1, 0, 0]
-                elif el == 1:
-                    one_hot_board_vector += [0, 1, 0]
+                    pass
+            if board.won or board.tied or board.count < 2:
+                continue
+            boards0.append(board)
+        while len(boards1) < num_boards / 6:
+            num_moves = random.randint(8,14)
+            board = GameBoard.GameBoard()
+            for _ in range(num_moves):
+                try:
+                    board.make_move(random.randint(0,6), suppress_won_message=True)
+                except:
+                    pass
+            if board.won or board.tied or board.count < 2:
+                continue
+            boards1.append(board)
+        while len(boards2) < num_boards / 6:
+            num_moves = random.randint(15,21)
+            board = GameBoard.GameBoard()
+            for _ in range(num_moves):
+                try:
+                    board.make_move(random.randint(0,6), suppress_won_message=True)
+                except:
+                    pass
+            if board.won or board.tied or board.count < 2:
+                continue
+            boards2.append(board)
+        while len(boards3) < num_boards / 6:
+            num_moves = random.randint(22,28)
+            board = GameBoard.GameBoard()
+            for _ in range(num_moves):
+                try:
+                    board.make_move(random.randint(0,6), suppress_won_message=True)
+                except:
+                    pass
+            if board.won or board.tied or board.count < 2:
+                continue
+            boards3.append(board)
+        while len(boards4) < num_boards / 6:
+            num_moves = random.randint(29, 35)
+            board = GameBoard.GameBoard()
+            for _ in range(num_moves):
+                try:
+                    board.make_move(random.randint(0,6), suppress_won_message=True)
+                except:
+                    pass
+            if board.won or board.tied or board.count < 15:
+                continue
+            boards4.append(board)
+        while len(boards5) < num_boards / 6:
+            num_moves = random.randint(36,42)
+            board = GameBoard.GameBoard()
+            for _ in range(num_moves):
+                try:
+                    board.make_move(random.randint(0,6), suppress_won_message=True)
+                except:
+                    pass
+            if board.won or board.tied or board.count < 29:
+                continue
+            boards5.append(board)
+        training_boards_list = boards0 + boards1 + boards2 + boards3 + boards4 + boards5
+        print("Generated boards...")
+        board_vector_list = []
+        targets_list = []
+        print("Creating data...")
+        for training_board in training_boards_list:
+            next_boards = self.get_next_boards(training_board) + self.get_next_boards(training_board, True)
+            board_vector = self.board_to_vector(training_board, training_board.whoseTurn() - 1)
+            board_vector_list.append(board_vector)
+            targets = []
+            for i in range(14):
+                if next_boards[i] is None:
+                    targets.append(0)
+                    continue
+                pieces_in_a_row = self.get_board_pieces_in_a_row(next_boards[i])
+                red = pieces_in_a_row[0]
+                black = pieces_in_a_row[1]
+                priority = 0.99
+                if i <= 6:
+                    color = training_board.whoseTurn()
+                    priority = 1
                 else:
-                    one_hot_board_vector += [0, 0, 1]
-            one_hot_board_vector += [board.whoseTurn() - 1]
-            board_vectors_list.append(one_hot_board_vector)
-            pieces_in_a_row = self.get_board_pieces_in_a_row(board)
-            red = pieces_in_a_row[1]
-            black = pieces_in_a_row[2]
-            if board.whoseTurn() == 1:
-                targets_list.append([((red/black) - .25)/3.75])
-            else:
-                targets_list.append([((black/red) - .25)/3.75])
+                    color = (training_board.whoseTurn() - 1.5) * -1 + 1.5
+                if color == 1:
+                    # targets.append(((red/black - 0.25) / 3.75) * priority)
+                    targets.append((red[0] * 4 + red[1] + 9 + red[2] * 16) / (black[0] * 4 + black[1] + 9 + black[2] * 16))
+                elif color == 2:
+                    # targets.append(((black/red - 0.25) / 3.75) * priority)
+                    targets.append((black[0] * 4 + black[1] + 9 + black[2] * 16) / (red[0] * 4 + red[1] + 9 + red[2] * 16))
+                else:
+                    raise Exception("You got a color that doesn't exist!")
+            n_targets = []
+            for i in range(14):
+                n_targets.append(targets[i] / np.sum(targets))
+            targets_list.append(n_targets)
+        # for i in range(len(training_boards_list)):
+        #     training_boards_list[i].print()
+        #     print(training_boards_list[i].whoseTurn())
+        #     print(targets_list[i])
+        #     formatted_prediction = []
+        #     for j in range(7):
+        #         formatted_prediction.append((targets_list[i][j] + targets_list[i][j + 7]) / 2)
+        #     print(formatted_prediction)
+        print("Created data...")
+        x_train, x_test, y_train, y_test = train_test_split(board_vector_list, targets_list, test_size=0.3)
 
-        # Split into training and testing
-        x_train, x_test, y_train, y_test = train_test_split(board_vectors_list, targets_list, test_size=0.3)
-        plot_data = self.net.fit(x_train, y_train, x_test, y_test, num_epochs)
-
+        plot_data = self.net.fit(x_train, y_train, x_test, y_test, num_epochs=num_epochs)
         plt.plot(plot_data[0], plot_data[1], label="Train")
         plt.plot(plot_data[0], plot_data[2], label="Test")
-        plt.xlabel = "Iteration"
-        plt.ylabel = "Error"
-        plt.title = "Diabetes"
-        plt.text = "Diabetes"
         plt.legend()
         plt.show()
 
+
     def get_board_pieces_in_a_row(self, board):
-        max_pieces = {1: 0, 2: 0}
+        red_2 = 0
+        red_3 = 0
+        red_4 = 0
+        black_2 = 0
+        black_3 = 0
+        black_4 = 0
 
         for y in range(6):
             for x in range(7):
                 if board.board[y][x] == 0:
                     continue
                 measuring = board.board[y][x]
-                new_max_pieces = max(board.check_won((y, x)))
-                if max_pieces[measuring] < new_max_pieces:
-                    max_pieces[measuring] = new_max_pieces
+                for el in board.check_won((y,x), suppress_message=True):
+                    if el == 2:
+                        if board.whoseTurn() == 1:
+                            red_2 += 1
+                        elif board.whoseTurn() == 2:
+                            black_2 += 1
+                    elif el == 3:
+                        if board.whoseTurn() == 1:
+                            red_3 += 1
+                        elif board.whoseTurn() == 2:
+                            black_3 += 1
+                    elif el > 3:
+                        if board.whoseTurn() == 1:
+                            red_4 += 1
+                        elif board.whoseTurn() == 2:
+                            black_4 += 1
+                # new_max_pieces = max(board.check_won((y, x), suppress_message=True))
+                # if max_pieces[measuring] < new_max_pieces:
+                #     max_pieces[measuring] = new_max_pieces
+        max_pieces = [[red_2, red_3, red_4], [black_2, black_3, black_4]]
         return max_pieces
 
 

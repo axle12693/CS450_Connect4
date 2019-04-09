@@ -15,12 +15,14 @@ class GameBoard:
         self.tied = False
         self.won_by = 0
 
-    def make_move(self, place=0, suppress_won_message=False):
+    def make_move(self, place=0, suppress_won_message=False, force_opponent_move=False):
         if self.board[0][place] != 0:
             raise FullColumnException("This column has already been filled up!")
         if self.won or self.tied:
             raise GameFinishedException("This game has been finished already!")
         color = self.whoseTurn()
+        if force_opponent_move:
+            color = int((color - 1.5) * -1 + 1.5)
         row = 0
         for i in range(5, -1, -1):
             if self.board[i][place] == 0:
@@ -135,7 +137,6 @@ class GameBoard:
                 total_fd += 1
             else:
                 break
-
         if total_h >= 4 or total_v >= 4 or total_rd >= 4 or total_fd >= 4:
             self.won = True
             self.won_by = color
