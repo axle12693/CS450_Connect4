@@ -17,13 +17,13 @@ ai = None
 if str.lower(new_net) == "y":
     ai = C4NN.C4NN()
 else:
-    ai_file = open("AIstoragefile_test3", "rb")
+    ai_file = open("AIstoragefile_test", "rb")
     ai = pickle.load(ai_file)
 
-ai.train_phase1(num_boards=1000, num_epochs=10)
-
-ai_file = open("AIstoragefile_test3", "wb")
-pickle.dump(ai, ai_file)
+# ai.train_phase1(num_boards=1000, num_epochs=10)
+#
+# ai_file = open("AIstoragefile_test", "wb")
+# pickle.dump(ai, ai_file)
 #
 # upgrades = []
 # upgrade_index = []

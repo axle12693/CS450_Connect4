@@ -359,31 +359,16 @@ class C4NN:
         black_3 = 0
         black_4 = 0
 
+        max_pieces = {1:0, 2:0}
+
         for y in range(6):
             for x in range(7):
                 if board.board[y][x] == 0:
                     continue
                 measuring = board.board[y][x]
-                for el in board.check_won((y,x), suppress_message=True):
-                    if el == 2:
-                        if board.whoseTurn() == 1:
-                            red_2 += 1
-                        elif board.whoseTurn() == 2:
-                            black_2 += 1
-                    elif el == 3:
-                        if board.whoseTurn() == 1:
-                            red_3 += 1
-                        elif board.whoseTurn() == 2:
-                            black_3 += 1
-                    elif el > 3:
-                        if board.whoseTurn() == 1:
-                            red_4 += 1
-                        elif board.whoseTurn() == 2:
-                            black_4 += 1
-                # new_max_pieces = max(board.check_won((y, x), suppress_message=True))
-                # if max_pieces[measuring] < new_max_pieces:
-                #     max_pieces[measuring] = new_max_pieces
-        max_pieces = [[red_2, red_3, red_4], [black_2, black_3, black_4]]
+                new_max_pieces = max(board.check_won((y, x), suppress_message=True))
+                if max_pieces[measuring] < new_max_pieces:
+                    max_pieces[measuring] = new_max_pieces
         return max_pieces
 
 
